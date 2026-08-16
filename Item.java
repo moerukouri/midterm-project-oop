@@ -42,12 +42,17 @@ public class Item{
     }
 
     public String toTableRow(int idWidth, int nameWidth, int quantityWidth, int priceWidth, int categoryWidth) {
-        String format = " %-" + idWidth + "s | %-" + nameWidth + "s | %-" + quantityWidth + "d | %" + priceWidth + ",.2f | %-" + categoryWidth + "s";
+        String format = " %-" + idWidth + "s | %-" + nameWidth + "s | %-" + quantityWidth + "d | %," + priceWidth + ".2f | %-" + categoryWidth + "s";
         return String.format(format, id, name, quantity, price, category);
     }
 
     public String toTableRowByCategory(int idWidth, int nameWidth, int quantityWidth, int priceWidth) {
-        String format = " %-" + idWidth + "s | %-" + nameWidth + "s | %-" + quantityWidth + "d | %-" + priceWidth + ",.2f";
+        String format = " %-" + idWidth + "s | %-" + nameWidth + "s | %-" + quantityWidth + "d | %," + priceWidth + ".2f";
         return String.format(format, id, name, quantity, price);
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id + " | Name: " + name + " | Quantity: " + quantity+ " | Price: " + String.format("%,.2f", price) + " | Category: " + category;
     }
 }

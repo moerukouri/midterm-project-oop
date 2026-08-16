@@ -131,7 +131,7 @@ public class UserInterface {
         if (item == null) {
             System.out.println("Item not found!");
         } else {
-            System.out.println(item);
+            printItems(List.of(item), true);
         }
     }
 
@@ -207,6 +207,7 @@ public class UserInterface {
     }
 
     private static void printTableHeader(int idWidth, int nameWidth, int quantityWidth, int priceWidth, int categoryWidth, boolean includeCategory) {
+        
         int borderWidth = idWidth + nameWidth + quantityWidth + priceWidth + (includeCategory ? categoryWidth : 0) + (includeCategory ? 13 : 9);
         if (includeCategory) {
             System.out.printf(" %-" + idWidth + "s | %-" + nameWidth + "s | %-" + quantityWidth + "s | %-" + priceWidth + "s | %-" + categoryWidth + "s%n", "ID", "Name", "Quantity", "Price", "Category");
