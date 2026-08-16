@@ -41,8 +41,13 @@ public class Item{
         this.price = price;
     }
 
-    public String toTableRow(int categoryWidth, int idWidth, int nameWidth, int quantityWidth, int priceWidth) {
-        String format = " %-" + categoryWidth + "s | %-" + idWidth + "s | %-" + nameWidth + "s | %-" + quantityWidth + "d | %-" + priceWidth + ".2f";
-        return String.format(format, category, id, name, quantity, price);
+    public String toTableRow(int idWidth, int nameWidth, int quantityWidth, int priceWidth, int categoryWidth) {
+        String format = " %-" + idWidth + "s | %-" + nameWidth + "s | %-" + quantityWidth + "s | %-" + priceWidth + "d | %-" + categoryWidth + "s";
+        return String.format(format, id, name, quantity, price, category);
+    }
+
+    public String toTableRowByCategory(int idWidth, int nameWidth, int quantityWidth, int priceWidth) {
+        String format = " %-" + idWidth + "s | %-" + nameWidth + "s | %-" + quantityWidth + "s | %-" + priceWidth + "d";
+        return String.format(format, id, name, quantity, price);
     }
 }
