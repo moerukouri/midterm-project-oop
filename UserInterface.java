@@ -46,6 +46,10 @@ public class UserInterface {
 
     // 2 Update Item
     public void updateItem() {
+        if (inventory.isEmpty()) {
+            System.out.println("No items in the inventory to update!");
+            return;
+        }
         String id = readNonEmptyString("Enter item ID to update: ", "ID");
         Item item = inventory.findItemById(id);
         if (item == null) {
@@ -88,6 +92,10 @@ public class UserInterface {
 
     // 3 Remove Item
     public void removeItem() {
+        if (inventory.isEmpty()) {
+            System.out.println("No items in the inventory to remove!");
+            return;
+        }
         String id = readNonEmptyString("Enter item ID to remove: ", "ID");
         try {
             Item removed = inventory.removeItem(id);
@@ -99,6 +107,10 @@ public class UserInterface {
 
     // 4 Display Items by Category
     public void displayItemsByCategory() {
+        if (inventory.isEmpty()) {
+            System.out.println("No items in the inventory to display!");
+            return;
+        }
         String category = readCategory("Enter category to display (Clothing, Electronics, Entertainment): ");
         if (category == null) {
             System.out.println("Category " + category + " does not exist!");
@@ -116,7 +128,7 @@ public class UserInterface {
     // 5 Display All Items
     public void displayAllItems() {
         List<Item> allItems = inventory.getAllItems();
-        if (allItems.isEmpty()) {
+        if (inventory.isEmpty()) {
             System.out.println("No items in the inventory!");
             return;
         }
@@ -126,6 +138,10 @@ public class UserInterface {
 
     // 6 Search Item
     public void searchItem() {
+        if (inventory.isEmpty()) {
+            System.out.println("No items in the inventory to search!");
+            return;
+        }
         String id = readNonEmptyString("Enter item ID to search: ", "ID");
         Item item = inventory.findItemById(id);
         if (item == null) {
@@ -137,7 +153,7 @@ public class UserInterface {
 
     // 7 Sort Items
     public void sortItems() {
-        if (inventory.getAllItems().isEmpty()) {
+        if (inventory.isEmpty()) {
             System.out.println("No items in the inventory to sort!");
             return;
         }
@@ -170,6 +186,10 @@ public class UserInterface {
 
     // 8 Display Low Stock Items
     public void displayLowStockItems() {
+        if (inventory.isEmpty()) {
+            System.out.println("No items in the inventory to display!");
+            return;
+        }
         List<Item> lowStockItems = inventory.getLowStockItems();
         if (lowStockItems.isEmpty()) {
             System.out.println("No low stock items found!");

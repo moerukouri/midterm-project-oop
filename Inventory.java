@@ -90,4 +90,8 @@ public class Inventory {
         sortedItems.sort(comparator);
         return sortedItems;
     }
+
+    public boolean isEmpty() {
+        return items.isEmpty();
+    }
 }
