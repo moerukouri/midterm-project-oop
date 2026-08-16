@@ -27,28 +27,25 @@ public class Inventory {
         Item item = findItemById(id);
         if (item == null) {
             throw new IllegalArgumentException("Item not found!");
-        } else {
-            items.remove(item);
-            return item;
         }
+        items.remove(item);
+        return item;
     }
 
     public void updateQuantity(String id, int newQuantity) {
         Item item = findItemById(id);
         if (item == null) {
             throw new IllegalArgumentException("Item not found!");
-        } else {
-            item.setQuantity(newQuantity);
         }
+        item.setQuantity(newQuantity);
     }
 
     public void updatePrice(String id, double newPrice) {
         Item item = findItemById(id);
         if (item == null) {
             throw new IllegalArgumentException("Item not found!");
-        } else {
-            item.setPrice(newPrice);
         }
+        item.setPrice(newPrice);
     }
 
     public List<Item> getItemsByCategory(String category) {
@@ -78,7 +75,13 @@ public class Inventory {
     public List<Item> getSortedItems(String sortBy, String order) {
         List<Item> sortedItems = new ArrayList<>(items);
         
-        Comparator<Item> comparator = sortBy.equalsIgnoreCase("quantity") ? Comparator.comparingInt(Item::getQuantity) : Comparator.comparingDouble(Item::getPrice);
+        Comparator<Item> comparator;
+
+        switch (sortBy.toLowerCase()) {
+            case "quantity" -> comparator = Comparator.comparingInt(Item::getQuantity);
+            case "price" -> comparator = Comparator.comparingDouble(Item::getPrice);
+            default -> throw new IllegalArgumentException("Invalid sortBy parameter: " + sortBy);
+        }
 
         if (order.equalsIgnoreCase("descending")) {
             comparator = comparator.reversed();
