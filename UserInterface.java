@@ -190,7 +190,7 @@ public class UserInterface {
             idWidth = Math.max(idWidth, item.getId().length());
             nameWidth = Math.max(nameWidth, item.getName().length());
             quantityWidth = Math.max(quantityWidth, String.valueOf(item.getQuantity()).length());
-            priceWidth = Math.max(priceWidth, String.valueOf(item.getPrice()).length());
+            priceWidth = Math.max(priceWidth, String.format("%,.2f", item.getPrice()).length());
             if (includeCategory) {
                 categoryWidth = Math.max(categoryWidth, item.getCategory().length());
             }
