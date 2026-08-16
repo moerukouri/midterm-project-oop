@@ -23,19 +23,20 @@ public class Inventory {
         items.add(item);
     }
 
-    public void removeItem(String id) {
+    public Item removeItem(String id) {
         Item item = findItemById(id);
         if (item == null) {
-            System.out.println("Item with ID " + id + " not found.");
+            throw new IllegalArgumentException("Item not found!");
         } else {
             items.remove(item);
+            return item;
         }
     }
 
     public void updateQuantity(String id, int newQuantity) {
         Item item = findItemById(id);
         if (item == null) {
-            System.out.println("Item with ID " + id + " not found.");
+            throw new IllegalArgumentException("Item not found!");
         } else {
             item.setQuantity(newQuantity);
         }
@@ -44,7 +45,7 @@ public class Inventory {
     public void updatePrice(String id, double newPrice) {
         Item item = findItemById(id);
         if (item == null) {
-            System.out.println("Item with ID " + id + " not found.");
+            throw new IllegalArgumentException("Item not found!");
         } else {
             item.setPrice(newPrice);
         }
