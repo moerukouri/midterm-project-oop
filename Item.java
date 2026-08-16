@@ -1,7 +1,7 @@
 public class Item{
-    private String category;
-    private String id;
-    private String name;
+    private final String category;
+    private final String id;
+    private final String name;
     private int quantity;
     private double price;
 
