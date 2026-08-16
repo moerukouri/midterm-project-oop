@@ -207,12 +207,13 @@ public class UserInterface {
     }
 
     private static void printTableHeader(int idWidth, int nameWidth, int quantityWidth, int priceWidth, int categoryWidth, boolean includeCategory) {
+        int borderWidth = idWidth + nameWidth + quantityWidth + priceWidth + (includeCategory ? categoryWidth : 0) + (includeCategory ? 13 : 9);
         if (includeCategory) {
             System.out.printf(" %-" + idWidth + "s | %-" + nameWidth + "s | %-" + quantityWidth + "s | %-" + priceWidth + "s | %-" + categoryWidth + "s%n", "ID", "Name", "Quantity", "Price", "Category");
-            System.out.println("-------------------------------------------------------------------------------------");
+            System.out.println("-".repeat(borderWidth));
         } else {
             System.out.printf(" %-" + idWidth + "s | %-" + nameWidth + "s | %-" + quantityWidth + "s | %-" + priceWidth + "s%n", "ID", "Name", "Quantity", "Price");
-            System.out.println("---------------------------------------------------------------");
+            System.out.println("-".repeat(borderWidth));
         }
     }
 
