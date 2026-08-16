@@ -271,7 +271,7 @@ public class UserInterface {
             String input = sc.nextLine().trim();
             try {
                 value = validator.parseInt(input, fieldName);
-                validator.validatePositiveInt(value, fieldName);
+                validator.validateNonNegativeInt(value, fieldName);
                 valid = true;
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -288,7 +288,7 @@ public class UserInterface {
             String input = sc.nextLine().trim();
             try {
                 value = validator.parseDouble(input, fieldName);
-                validator.validatePositiveDouble(value, fieldName);
+                validator.validateNonNegativeDouble(value, fieldName);
                 valid = true;
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
