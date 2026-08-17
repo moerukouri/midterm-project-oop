@@ -5,10 +5,13 @@ public class UserInterface {
     private static final Scanner sc = new Scanner(System.in);
     private static final Inventory inventory = new Inventory();
     private static final Validator validator = new Validator();
+    private static final String BORDER_STRING = "=".repeat(50);
 
     // Menu handler
     public void printMenu() {
-        System.out.println("Inventory Management System");
+        System.out.println(BORDER_STRING);
+        System.out.println("                  Inventory Management System");
+        System.out.println(BORDER_STRING);
         System.out.println("1 - Add Item");
         System.out.println("2 - Update Item");
         System.out.println("3 - Remove Item");
@@ -29,6 +32,9 @@ public class UserInterface {
 
     // 1 Add Item
     public void addItem() {
+        System.out.println(BORDER_STRING);
+        System.out.println("                  ADD NEW ITEM");
+        System.out.println(BORDER_STRING);
         String category = readCategory("Enter item category (Clothing, Electronics, Entertainment): ");
         if (category == null) {
             System.out.println("Category " + category + " does not exist!");
@@ -50,6 +56,9 @@ public class UserInterface {
             System.out.println("No items in the inventory to update!");
             return;
         }
+        System.out.println(BORDER_STRING);
+        System.out.println("                  UPDATE ITEM");
+        System.out.println(BORDER_STRING);
         String id = readNonEmptyString("Enter item ID to update: ", "ID");
         Item item = inventory.findItemById(id);
         if (item == null) {
@@ -96,6 +105,9 @@ public class UserInterface {
             System.out.println("No items in the inventory to remove!");
             return;
         }
+        System.out.println(BORDER_STRING);
+        System.out.println("                  REMOVE ITEM");
+        System.out.println(BORDER_STRING);
         String id = readNonEmptyString("Enter item ID to remove: ", "ID");
         try {
             Item removed = inventory.removeItem(id);
@@ -111,6 +123,9 @@ public class UserInterface {
             System.out.println("No items in the inventory to display!");
             return;
         }
+        System.out.println(BORDER_STRING);
+        System.out.println("                  DISPLAY ITEMS BY CATEGORY");
+        System.out.println(BORDER_STRING);
         String category = readCategory("Enter category to display (Clothing, Electronics, Entertainment): ");
         if (category == null) {
             System.out.println("Category " + category + " does not exist!");
@@ -132,6 +147,9 @@ public class UserInterface {
             System.out.println("No items in the inventory!");
             return;
         }
+        System.out.println(BORDER_STRING);
+        System.out.println("                  DISPLAY ALL ITEMS");
+        System.out.println(BORDER_STRING);
 
         printItems(allItems, true);
     }
@@ -142,6 +160,9 @@ public class UserInterface {
             System.out.println("No items in the inventory to search!");
             return;
         }
+        System.out.println(BORDER_STRING);
+        System.out.println("                  SEARCH ITEM");
+        System.out.println(BORDER_STRING);
         String id = readNonEmptyString("Enter item ID to search: ", "ID");
         Item item = inventory.findItemById(id);
         if (item == null) {
@@ -157,6 +178,10 @@ public class UserInterface {
             System.out.println("No items in the inventory to sort!");
             return;
         }
+
+        System.out.println(BORDER_STRING);
+        System.out.println("                  SORT ITEMS");
+        System.out.println(BORDER_STRING);
 
         String sortChoice = readNonEmptyString("Sort by Quantity or Price? (Q/P): ", "Sort Choice");
         String sortBy;
@@ -190,6 +215,9 @@ public class UserInterface {
             System.out.println("No items in the inventory to display!");
             return;
         }
+        System.out.println(BORDER_STRING);
+        System.out.println("                  DISPLAY LOW STOCK ITEMS");
+        System.out.println(BORDER_STRING);
         List<Item> lowStockItems = inventory.getLowStockItems();
         if (lowStockItems.isEmpty()) {
             System.out.println("No low stock items found!");
@@ -292,7 +320,7 @@ public class UserInterface {
             String input = sc.nextLine().trim();
             try {
                 value = validator.parseInt(input, fieldName);
-                validator.validateNonNegativeInt(value, fieldName);
+                validator.validatePositiveInt(value, fieldName);
                 valid = true;
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -309,7 +337,7 @@ public class UserInterface {
             String input = sc.nextLine().trim();
             try {
                 value = validator.parseDouble(input, fieldName);
-                validator.validateNonNegativeDouble(value, fieldName);
+                validator.validatePositiveDouble(value, fieldName);
                 valid = true;
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());

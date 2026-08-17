@@ -23,15 +23,15 @@ public class Validator {
         }
     }
 
-    public void validateNonNegativeInt(int value, String fieldName) {
-        if (value < 0) {
-            throw new IllegalArgumentException(fieldName + " must be a non-negative integer.");
+    public void validatePositiveInt(int value, String fieldName) {
+        if (value <= 0) {
+            throw new IllegalArgumentException(fieldName + " must be a positive integer.");
         }
     }
 
-    public void validateNonNegativeDouble(double value, String fieldName) {
-        if (value < 0) {
-            throw new IllegalArgumentException(fieldName + " must be a non-negative number.");
+    public void validatePositiveDouble(double value, String fieldName) {
+        if (value <= 0) {
+            throw new IllegalArgumentException(fieldName + " must be a positive number.");
         }
     }
     
