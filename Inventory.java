@@ -12,7 +12,7 @@ public class Inventory {
 
     public Item findItemById(String id) {
         for (Item item : items) {
-            if (item.getId().equals(id)) {
+            if (item.getId().equalsIgnoreCase(id)) {
                 return item;
             }
         }

@@ -24,8 +24,7 @@ public class UserInterface {
     }
 
     public int getMenuChoice() {
-        String input = readNonEmptyString("Enter your choice: ", "Menu Choice");
-        return validator.parseMenuChoice(input);
+        return readMenuChoice(1, 9);
     }
 
     // Item management methods
@@ -35,13 +34,10 @@ public class UserInterface {
         System.out.println(BORDER_STRING);
         System.out.println("                  ADD NEW ITEM");
         System.out.println(BORDER_STRING);
-        String category = readCategory("Enter item category (Clothing, Electronics, Entertainment): ");
-        if (category == null) {
-            System.out.println("Category " + category + " does not exist!");
-            return;
-        }
-        String id = readUniqueId("Enter item ID: ");
-        String name = readNonEmptyString("Enter item name: ", "Name");
+
+        String category = readCategory();
+        String id = readUniqueId();
+        String name = readName();
         int quantity = readPositiveInt("Enter item quantity: ", "Quantity");
         double price = readPositiveDouble("Enter item price: ", "Price");
 
@@ -59,7 +55,8 @@ public class UserInterface {
         System.out.println(BORDER_STRING);
         System.out.println("                  UPDATE ITEM");
         System.out.println(BORDER_STRING);
-        String id = readNonEmptyString("Enter item ID to update: ", "ID");
+
+        String id = readId("Enter item ID to update: ");
         Item item = inventory.findItemById(id);
         if (item == null) {
             System.out.println("Item with not found!");
@@ -79,24 +76,16 @@ public class UserInterface {
     // Update Quantity and Price methods
     public void updateQuantity(String id, Item item) {
         int oldQuantity = item.getQuantity();
-        int newQuantity = readPositiveInt("Enter new quantity: ", "Quantity");
-        try {
-            inventory.updateQuantity(id, newQuantity);
-            System.out.println("Quantity of item " + item.getName() + " is updated from " + oldQuantity + " to " + newQuantity + ".");
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+        int newQuantity = readNonNegativeInt("Enter new quantity: ", "Quantity");
+        inventory.updateQuantity(id, newQuantity);
+        System.out.println("Quantity of item " + item.getName() + " is updated from " + oldQuantity + " to " + newQuantity + ".");
     }
 
     public void updatePrice(String id, Item item) {
         double oldPrice = item.getPrice();
         double newPrice = readPositiveDouble("Enter new price: ", "Price");
-        try {
-            inventory.updatePrice(id, newPrice);
-            System.out.println("Price of item " + item.getName() + " is updated from " + oldPrice + " to " + newPrice + ".");
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+        inventory.updatePrice(id, newPrice);
+        System.out.println("Price of item " + item.getName() + " is updated from " + oldPrice + " to " + newPrice + ".");
     }
 
     // 3 Remove Item
@@ -108,13 +97,9 @@ public class UserInterface {
         System.out.println(BORDER_STRING);
         System.out.println("                  REMOVE ITEM");
         System.out.println(BORDER_STRING);
-        String id = readNonEmptyString("Enter item ID to remove: ", "ID");
-        try {
-            Item removed = inventory.removeItem(id);
-            System.out.println("Item " + removed.getName() + " with ID " + id + " has been removed from the inventory.");
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+        String id = readId("Enter item ID to remove: ");
+        Item removed = inventory.removeItem(id);
+        System.out.println("Item " + removed.getName() + " with ID " + id + " has been removed from the inventory.");
     }
 
     // 4 Display Items by Category
@@ -126,11 +111,7 @@ public class UserInterface {
         System.out.println(BORDER_STRING);
         System.out.println("                  DISPLAY ITEMS BY CATEGORY");
         System.out.println(BORDER_STRING);
-        String category = readCategory("Enter category to display (Clothing, Electronics, Entertainment): ");
-        if (category == null) {
-            System.out.println("Category " + category + " does not exist!");
-            return;
-        }
+        String category = readCategory();
         List<Item> itemsByCategory = inventory.getItemsByCategory(category);
         if (itemsByCategory.isEmpty()) {
             System.out.println("No items found in " + category + " category!");
@@ -142,16 +123,16 @@ public class UserInterface {
 
     // 5 Display All Items
     public void displayAllItems() {
-        List<Item> allItems = inventory.getAllItems();
         if (inventory.isEmpty()) {
             System.out.println("No items in the inventory!");
             return;
         }
+
         System.out.println(BORDER_STRING);
         System.out.println("                  DISPLAY ALL ITEMS");
         System.out.println(BORDER_STRING);
 
-        printItems(allItems, true);
+        printItems(inventory.getAllItems(), true);
     }
 
     // 6 Search Item
@@ -163,7 +144,7 @@ public class UserInterface {
         System.out.println(BORDER_STRING);
         System.out.println("                  SEARCH ITEM");
         System.out.println(BORDER_STRING);
-        String id = readNonEmptyString("Enter item ID to search: ", "ID");
+        String id = readId("Enter item ID to search: ");
         Item item = inventory.findItemById(id);
         if (item == null) {
             System.out.println("Item not found!");
@@ -267,82 +248,108 @@ public class UserInterface {
     }
 
     // Input reading methods
-    private static String readNonEmptyString(String prompt, String fieldName) {
-        String input;
-        boolean valid = false;
-        do {
+    private static String readNonEmptyString(String prompt, String fieldName){
+        System.out.print(prompt);
+        String input = sc.nextLine().trim();
+
+        while(input.isEmpty()){
+            System.out.println(fieldName + " cannot be empty.");
             System.out.print(prompt);
             input = sc.nextLine().trim();
-            try {
-                validator.validateNonEmpty(input, fieldName);
-                valid = true;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        } while (!valid);
+        }
         return input;
     }
 
-    private static String readCategory(String prompt) {
-        String category;
-        boolean valid = false;
-        do {
-            System.out.print(prompt);
+    private static String readName(){
+        System.out.print("Enter item name: ");
+        String name = sc.nextLine().trim();
+
+        while(!validator.isValidName(name)){
+            System.out.println("Name must contain only letters, numbers, and spaces.");
+            System.out.print("Enter item name: ");
+            name = sc.nextLine().trim();
+        }
+        return name;
+    }
+
+    private static String readCategory(){
+        System.out.print("Enter item category (Clothing, Electronics, Entertainment): ");
+        String category = sc.nextLine().trim();
+
+        while(!validator.isValidCategory(category)){
+            System.out.println("Invalid category. Please enter a valid category (Clothing, Electronics, Entertainment).");
+            System.out.print("Enter item category (Clothing, Electronics, Entertainment): ");
             category = sc.nextLine().trim();
-            if (validator.isValidCategory(category)) {
-                valid = true;
-            } else {
-                System.out.println("Invalid category. Please enter a valid category (Clothing, Electronics, Entertainment).");
-            }
-        } while (!valid);
+        }
         return validator.normalizeCategory(category);
     }
 
-    private static String readUniqueId(String prompt) {
-        String id;
-        boolean valid = false;
-        do {
-            id = readNonEmptyString(prompt, "ID");
-            if (inventory.findItemById(id) != null) {
-                System.out.println("Item with ID " + id + " already exists. Please enter a unique ID.");
-            } else {
-                valid = true;
-            }
-        } while (!valid);
+    private static String readId(String prompt){
+        System.out.print(prompt);
+        String id = sc.nextLine().trim();
+
+        while(!validator.isValidId(id)){
+            System.out.println("Invalid ID. Please enter exactly 6 letters and/or numbers.");
+            System.out.print(prompt);
+            id = sc.nextLine().trim();
+        }
+        return id;
+    }
+    
+    private static String readUniqueId(){
+        String id = readId("Enter item ID (6 uppercase letters/numbers): ");
+        while (inventory.findItemById(id) != null) {
+            System.out.println("Item with ID " + id + " already exists. Please enter a unique ID.");
+            id = readId("Enter item ID (6 uppercase letters/numbers): ");
+        }
         return id;
     }
 
     private static int readPositiveInt(String prompt, String fieldName) {
-        int value = 0;
-        boolean valid = false;
-        do {
+        System.out.print(prompt);
+        String input = sc.nextLine().trim();
+ 
+        while (!validator.isValidPositiveInteger(input)) {
+            System.out.println(fieldName + " must be a positive whole number.");
             System.out.print(prompt);
-            String input = sc.nextLine().trim();
-            try {
-                value = validator.parseInt(input, fieldName);
-                validator.validatePositiveInt(value, fieldName);
-                valid = true;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        } while (!valid);
-        return value;
+            input = sc.nextLine().trim();
+        }
+        return Integer.parseInt(input);
+    }
+ 
+    private static int readNonNegativeInt(String prompt, String fieldName) {
+        System.out.print(prompt);
+        String input = sc.nextLine().trim();
+ 
+        while (!validator.isValidNonNegativeInteger(input)) {
+            System.out.println(fieldName + " must be a whole number that is zero or greater.");
+            System.out.print(prompt);
+            input = sc.nextLine().trim();
+        }
+        return Integer.parseInt(input);
+    }
+ 
+    private static double readPositiveDouble(String prompt, String fieldName) {
+        System.out.print(prompt);
+        String input = sc.nextLine().trim();
+ 
+        while (!validator.isValidPositiveDouble(input)) {
+            System.out.println(fieldName + " must be a positive number with at most two decimal places.");
+            System.out.print(prompt);
+            input = sc.nextLine().trim();
+        }
+        return Double.parseDouble(input);
     }
 
-    private static double readPositiveDouble(String prompt, String fieldName) {
-        double value = 0;
-        boolean valid = false;
-        do {
-            System.out.print(prompt);
-            String input = sc.nextLine().trim();
-            try {
-                value = validator.parseDouble(input, fieldName);
-                validator.validatePositiveDouble(value, fieldName);
-                valid = true;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        } while (!valid);
-        return value;
+    private static int readMenuChoice(int low, int high){
+        System.out.print("Enter your choice: ");
+        String choice = sc.nextLine().trim();
+
+        while (!validator.isValidPositiveInteger(choice) || Integer.parseInt(choice) < low || Integer.parseInt(choice) > high){
+            System.out.println("Invalid choice. Enter a whole number from " + low + "-" + high + ".");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextLine().trim();
+        }
+        return Integer.parseInt(choice);
     }
 }

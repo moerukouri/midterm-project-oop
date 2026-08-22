@@ -1,14 +1,40 @@
 public class Validator {
-    private final String[] VALID_CATEGORIES = {"Clothing", "Electronics", "Entertainment"};
-    
-    public boolean isValidCategory(String category) {
-        return normalizeCategory(category) != null;
+    private final String[] VALID_CATEGORIES = {"Electronics", "Clothing", "Entertainment"};
+
+    public boolean isValidPositiveInteger(String input) {
+        try {
+            int value = Integer.parseInt(input);
+            return value > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public boolean isValidNonNegativeInteger(String input) {
+        try {
+            int value = Integer.parseInt(input);
+            return value >= 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public boolean isValidPositiveDouble(String input) {
+        if(!input.matches("^[0-9]+(\\.[0-9]{1,2})?$")){
+            return false;
+        }
+        return Double.parseDouble(input) > 0;
+    }
+
+    public boolean isValidId(String input) {
+        return input.matches("^[A-Z0-9]{6}$");
+    }
+
+    public boolean isValidName(String input){
+        return input.matches("^[a-zA-Z0-9 ]+$");
     }
 
     public String normalizeCategory(String category) {
-        if (category == null) {
-            return null;
-        }
         for (String validCategory : VALID_CATEGORIES) {
             if (validCategory.equalsIgnoreCase(category)) {
                 return validCategory;
@@ -17,45 +43,7 @@ public class Validator {
         return null;
     }
 
-    public void validateNonEmpty(String value, String fieldName) {
-        if (value == null || value.trim().isEmpty()) {
-            throw new IllegalArgumentException(fieldName + " cannot be empty.");
-        }
-    }
-
-    public void validatePositiveInt(int value, String fieldName) {
-        if (value <= 0) {
-            throw new IllegalArgumentException(fieldName + " must be a positive integer.");
-        }
-    }
-
-    public void validatePositiveDouble(double value, String fieldName) {
-        if (value <= 0) {
-            throw new IllegalArgumentException(fieldName + " must be a positive number.");
-        }
-    }
-    
-    public int parseInt(String value, String fieldName) {
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(fieldName + " must be a valid integer.");
-        }
-    }
-
-    public double parseDouble(String value, String fieldName) {
-        try {
-            return Double.parseDouble(value);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(fieldName + " must be a valid number.");
-        }
-    }
-
-    public int parseMenuChoice(String text) {
-        try {
-            return Integer.parseInt(text);
-        } catch (NumberFormatException e) {
-            return -1;
-        }
+    public boolean isValidCategory(String category) {
+        return normalizeCategory(category) != null;
     }
 }
