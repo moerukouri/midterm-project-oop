@@ -59,7 +59,7 @@ public class UserInterface {
         String id = readId("Enter item ID to update: ");
         Item item = inventory.findItemById(id);
         if (item == null) {
-            System.out.println("Item with not found!");
+            System.out.println("Item with ID " + id + " not found!");
             return;
         }
 
@@ -98,6 +98,11 @@ public class UserInterface {
         System.out.println("                  REMOVE ITEM");
         System.out.println(BORDER_STRING);
         String id = readId("Enter item ID to remove: ");
+        Item item = inventory.findItemById(id);
+        if (item == null) {
+            System.out.println("Item with ID " + id + " not found!");
+            return;
+        }
         Item removed = inventory.removeItem(id);
         System.out.println("Item " + removed.getName() + " with ID " + id + " has been removed from the inventory.");
     }
@@ -293,7 +298,7 @@ public class UserInterface {
             System.out.print(prompt);
             id = sc.nextLine().trim();
         }
-        return id;
+        return id.toUpperCase();
     }
     
     private static String readUniqueId(){

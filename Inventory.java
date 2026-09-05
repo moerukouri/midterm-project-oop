@@ -65,7 +65,7 @@ public class Inventory {
     public List<Item> getLowStockItems() {
         List<Item> lowStockItems = new ArrayList<>();
         for (Item item : items) {
-            if (item.getQuantity() < THRESHOLD) {
+            if (item.getQuantity() <= THRESHOLD) {
                 lowStockItems.add(item);
             }
         }

@@ -27,7 +27,7 @@ public class Validator {
     }
 
     public boolean isValidId(String input) {
-        return input.matches("^[A-Z0-9]{6}$");
+        return input.matches("^[a-zA-Z0-9]{6}$");
     }
 
     public boolean isValidName(String input){
