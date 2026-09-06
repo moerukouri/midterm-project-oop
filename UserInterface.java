@@ -126,6 +126,10 @@ public class UserInterface {
             return;
         }
 
+        System.out.println(BORDER_STRING);
+        System.out.println("                  DISPLAY ITEMS BY " + category.toUpperCase());
+        System.out.println(BORDER_STRING);
+
         printItems(itemsByCategory, false);
     }
 
@@ -231,7 +235,7 @@ public class UserInterface {
         for (Item item : items) {
             idWidth = Math.max(idWidth, item.getId().length());
             nameWidth = Math.max(nameWidth, item.getName().length());
-            quantityWidth = Math.max(quantityWidth, String.valueOf(item.getQuantity()).length());
+            quantityWidth = Math.max(quantityWidth, String.format("%,d", item.getQuantity()).length());
             priceWidth = Math.max(priceWidth, String.format("%,.2f", item.getPrice()).length());
             if (includeCategory) {
                 categoryWidth = Math.max(categoryWidth, item.getCategory().length());

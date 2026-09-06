@@ -53,6 +53,6 @@ public class Item{
 
     @Override
     public String toString() {
-        return "ID: " + id + " | Name: " + name + " | Quantity: " + quantity+ " | Price: " + String.format("%,.2f", price) + " | Category: " + category;
+        return "ID: " + id + " | Name: " + name + " | Quantity: " + String.format("P%,d", quantity) + " | Price: " + String.format("P%,.2f", price) + " | Category: " + category;
     }
 }
