@@ -4,6 +4,9 @@ public class Validator {
     public boolean isValidPositiveInteger(String input) {
         try {
             int value = Integer.parseInt(input);
+            if(!input.matches("^[1-9][0-9]*$")){
+                return false;
+            }
             return value > 0;
         } catch (NumberFormatException e) {
             return false;
@@ -13,6 +16,9 @@ public class Validator {
     public boolean isValidNonNegativeInteger(String input) {
         try {
             int value = Integer.parseInt(input);
+            if(!input.matches("^[0-9]+$")){
+                return false;
+            }
             return value >= 0;
         } catch (NumberFormatException e) {
             return false;
@@ -20,7 +26,7 @@ public class Validator {
     }
 
     public boolean isValidPositiveDouble(String input) {
-        if(!input.matches("^[0-9]+(\\.[0-9]{1,2})?$")){
+        if(!input.matches("^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$")){
             return false;
         }
         return Double.parseDouble(input) > 0;
