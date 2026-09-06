@@ -282,9 +282,9 @@ public class UserInterface {
     }
 
     private static String readCategory(){
-        String category = readValidatedInput("Enter item category (Electronics, Clothing, Food, Furniture, Books): ", 
+        String category = readValidatedInput("Enter item category (Electronics, Clothing, Entertainment): ", 
         validator::isValidCategory, 
-        "Invalid category. Please enter one of the following: Electronics, Clothing, Food, Furniture, Books.");
+        "Invalid category. Please enter one of the following: Electronics, Clothing, Entertainment.");
         return validator.normalizeCategory(category);
     }
 
