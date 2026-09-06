@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 public class UserInterface {
     private static final Scanner sc = new Scanner(System.in);
@@ -10,7 +11,7 @@ public class UserInterface {
     // Menu handler
     public void printMenu() {
         System.out.println(BORDER_STRING);
-        System.out.println("                  Inventory Management System");
+        System.out.println("            Inventory Management System");
         System.out.println(BORDER_STRING);
         System.out.println("1 - Add Item");
         System.out.println("2 - Update Item");
@@ -48,14 +49,14 @@ public class UserInterface {
 
     // 2 Update Item
     public void updateItem() {
-        if (inventory.isEmpty()) {
-            System.out.println("No items in the inventory to update!");
-            return;
-        }
         System.out.println(BORDER_STRING);
         System.out.println("                  UPDATE ITEM");
         System.out.println(BORDER_STRING);
 
+        if (inventory.isEmpty()) {
+            System.out.println("No items in the inventory to update!");
+            return;
+        }
         String id = readId("Enter item ID to update: ");
         Item item = inventory.findItemById(id);
         if (item == null) {
@@ -90,13 +91,14 @@ public class UserInterface {
 
     // 3 Remove Item
     public void removeItem() {
+        System.out.println(BORDER_STRING);
+        System.out.println("                  REMOVE ITEM");
+        System.out.println(BORDER_STRING);
+
         if (inventory.isEmpty()) {
             System.out.println("No items in the inventory to remove!");
             return;
         }
-        System.out.println(BORDER_STRING);
-        System.out.println("                  REMOVE ITEM");
-        System.out.println(BORDER_STRING);
         String id = readId("Enter item ID to remove: ");
         Item item = inventory.findItemById(id);
         if (item == null) {
@@ -109,13 +111,14 @@ public class UserInterface {
 
     // 4 Display Items by Category
     public void displayItemsByCategory() {
+        System.out.println(BORDER_STRING);
+        System.out.println("                  DISPLAY ITEMS BY CATEGORY");
+        System.out.println(BORDER_STRING);
+
         if (inventory.isEmpty()) {
             System.out.println("No items in the inventory to display!");
             return;
         }
-        System.out.println(BORDER_STRING);
-        System.out.println("                  DISPLAY ITEMS BY CATEGORY");
-        System.out.println(BORDER_STRING);
         String category = readCategory();
         List<Item> itemsByCategory = inventory.getItemsByCategory(category);
         if (itemsByCategory.isEmpty()) {
@@ -142,13 +145,14 @@ public class UserInterface {
 
     // 6 Search Item
     public void searchItem() {
+        System.out.println(BORDER_STRING);
+        System.out.println("                  SEARCH ITEM");
+        System.out.println(BORDER_STRING);
+
         if (inventory.isEmpty()) {
             System.out.println("No items in the inventory to search!");
             return;
         }
-        System.out.println(BORDER_STRING);
-        System.out.println("                  SEARCH ITEM");
-        System.out.println(BORDER_STRING);
         String id = readId("Enter item ID to search: ");
         Item item = inventory.findItemById(id);
         if (item == null) {
@@ -160,15 +164,14 @@ public class UserInterface {
 
     // 7 Sort Items
     public void sortItems() {
-        if (inventory.isEmpty()) {
-            System.out.println("No items in the inventory to sort!");
-            return;
-        }
-
         System.out.println(BORDER_STRING);
         System.out.println("                  SORT ITEMS");
         System.out.println(BORDER_STRING);
 
+        if (inventory.isEmpty()) {
+            System.out.println("No items in the inventory to sort!");
+            return;
+        }
         String sortChoice = readNonEmptyString("Sort by Quantity or Price? (Q/P): ", "Sort Choice");
         String sortBy;
         if(sortChoice.equalsIgnoreCase("Q")){
@@ -191,19 +194,24 @@ public class UserInterface {
             return;
         }
 
+        System.out.println(BORDER_STRING);
+        System.out.println("        SORT ITEMS BY " + sortBy.toUpperCase() + " IN " + order.toUpperCase() + " ORDER        ");
+        System.out.println(BORDER_STRING);
+
         List<Item> sortedItems = inventory.getSortedItems(sortBy, order);
         printItems(sortedItems, true);
     }
 
     // 8 Display Low Stock Items
     public void displayLowStockItems() {
+        System.out.println(BORDER_STRING);
+        System.out.println("                  DISPLAY LOW STOCK ITEMS");
+        System.out.println(BORDER_STRING);
+
         if (inventory.isEmpty()) {
             System.out.println("No items in the inventory to display!");
             return;
         }
-        System.out.println(BORDER_STRING);
-        System.out.println("                  DISPLAY LOW STOCK ITEMS");
-        System.out.println(BORDER_STRING);
         List<Item> lowStockItems = inventory.getLowStockItems();
         if (lowStockItems.isEmpty()) {
             System.out.println("No low stock items found!");
@@ -253,108 +261,69 @@ public class UserInterface {
     }
 
     // Input reading methods
-    private static String readNonEmptyString(String prompt, String fieldName){
+    private static String readValidatedInput(String prompt, Predicate<String> isValid, String errorMessage) {
         System.out.print(prompt);
         String input = sc.nextLine().trim();
 
-        while(input.isEmpty()){
-            System.out.println(fieldName + " cannot be empty.");
+        while (!isValid.test(input)) {
+            System.out.println(errorMessage);
             System.out.print(prompt);
             input = sc.nextLine().trim();
         }
         return input;
     }
 
-    private static String readName(){
-        System.out.print("Enter item name: ");
-        String name = sc.nextLine().trim();
+    private static String readNonEmptyString(String prompt, String fieldName){
+        return readValidatedInput(prompt, input -> !input.isEmpty(), fieldName + " cannot be empty.");
+    }
 
-        while(!validator.isValidName(name)){
-            System.out.println("Name must contain only letters, numbers, and spaces.");
-            System.out.print("Enter item name: ");
-            name = sc.nextLine().trim();
-        }
-        return name;
+    private static String readName(){
+        return readValidatedInput("Enter item name: ", validator::isValidName, "Name must contain only letters, numbers, and spaces.");
     }
 
     private static String readCategory(){
-        System.out.print("Enter item category (Clothing, Electronics, Entertainment): ");
-        String category = sc.nextLine().trim();
-
-        while(!validator.isValidCategory(category)){
-            System.out.println("Invalid category. Please enter a valid category (Clothing, Electronics, Entertainment).");
-            System.out.print("Enter item category (Clothing, Electronics, Entertainment): ");
-            category = sc.nextLine().trim();
-        }
+        String category = readValidatedInput("Enter item category (Electronics, Clothing, Food, Furniture, Books): ", 
+        validator::isValidCategory, 
+        "Invalid category. Please enter one of the following: Electronics, Clothing, Food, Furniture, Books.");
         return validator.normalizeCategory(category);
     }
 
     private static String readId(String prompt){
-        System.out.print(prompt);
-        String id = sc.nextLine().trim();
-
-        while(!validator.isValidId(id)){
-            System.out.println("Invalid ID. Please enter exactly 6 letters and/or numbers.");
-            System.out.print(prompt);
-            id = sc.nextLine().trim();
-        }
+        String id = readValidatedInput(prompt, validator::isValidId, 
+            "Invalid ID. Please enter exactly 6 letters and/or numbers.");
         return id.toUpperCase();
     }
     
     private static String readUniqueId(){
-        String id = readId("Enter item ID (6 uppercase letters/numbers): ");
+        String id = readId("Enter item ID (6 letters/numbers): ");
         while (inventory.findItemById(id) != null) {
             System.out.println("Item with ID " + id + " already exists. Please enter a unique ID.");
-            id = readId("Enter item ID (6 uppercase letters/numbers): ");
+            id = readId("Enter item ID (6 letters/numbers): ");
         }
         return id;
     }
 
     private static int readPositiveInt(String prompt, String fieldName) {
-        System.out.print(prompt);
-        String input = sc.nextLine().trim();
- 
-        while (!validator.isValidPositiveInteger(input)) {
-            System.out.println(fieldName + " must be a positive whole number.");
-            System.out.print(prompt);
-            input = sc.nextLine().trim();
-        }
+        String input = readValidatedInput(prompt, validator::isValidPositiveInteger, fieldName + " must be a whole number greater than zero.");
         return Integer.parseInt(input);
     }
  
     private static int readNonNegativeInt(String prompt, String fieldName) {
-        System.out.print(prompt);
-        String input = sc.nextLine().trim();
- 
-        while (!validator.isValidNonNegativeInteger(input)) {
-            System.out.println(fieldName + " must be a whole number that is zero or greater.");
-            System.out.print(prompt);
-            input = sc.nextLine().trim();
-        }
+        String input = readValidatedInput(prompt, validator::isValidNonNegativeInteger, fieldName + " must be a whole number that is zero or greater.");
         return Integer.parseInt(input);
     }
  
     private static double readPositiveDouble(String prompt, String fieldName) {
-        System.out.print(prompt);
-        String input = sc.nextLine().trim();
- 
-        while (!validator.isValidPositiveDouble(input)) {
-            System.out.println(fieldName + " must be a positive number with at most two decimal places.");
-            System.out.print(prompt);
-            input = sc.nextLine().trim();
-        }
+        String input = readValidatedInput(prompt, validator::isValidPositiveDouble, fieldName + " must be a positive number with at most two decimal places.");
         return Double.parseDouble(input);
     }
 
     private static int readMenuChoice(int low, int high){
-        System.out.print("Enter your choice: ");
-        String choice = sc.nextLine().trim();
-
-        while (!validator.isValidPositiveInteger(choice) || Integer.parseInt(choice) < low || Integer.parseInt(choice) > high){
-            System.out.println("Invalid choice. Enter a whole number from " + low + "-" + high + ".");
-            System.out.print("Enter your choice: ");
-            choice = sc.nextLine().trim();
-        }
-        return Integer.parseInt(choice);
+        String input = readValidatedInput("Enter your choice: ",
+        choice -> validator.isValidPositiveInteger(choice)
+            && Integer.parseInt(choice) >= low
+            && Integer.parseInt(choice) <= high, 
+            "Invalid choice. Please enter a number between " + low + " and " + high + ".");
+        return Integer.parseInt(input);
     }
 }
