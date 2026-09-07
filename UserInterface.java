@@ -36,7 +36,7 @@ public class UserInterface {
         String id = readUniqueId();
         String name = readName();
         int quantity = readPositiveInt("Enter item quantity: ", "Quantity");
-        double price = readPositiveDouble("Enter item price: ", "Price");
+        double price = readPositiveDouble("Enter item price: P ", "Price");
 
         Item newItem = createItem(category, id, name, quantity, price);
         inventory.addItem(newItem);
