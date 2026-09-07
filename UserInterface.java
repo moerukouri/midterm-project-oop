@@ -42,9 +42,18 @@ public class UserInterface {
         int quantity = readPositiveInt("Enter item quantity: ", "Quantity");
         double price = readPositiveDouble("Enter item price: ", "Price");
 
-        Item newItem = new Item(category, id, name, quantity, price);
+        Item newItem = createItem(category, id, name, quantity, price);
         inventory.addItem(newItem);
         System.out.println("Item added successfully!");
+    }
+
+    private static Item createItem(String category, String id, String name, int quantity, double price) {
+        return switch (category.toLowerCase()) {
+            case "electronics" -> new Electronics(id, name, quantity, price);
+            case "clothing" -> new Clothing(id, name, quantity, price);
+            case "entertainment" -> new Entertainment(id, name, quantity, price);
+            default -> throw new IllegalArgumentException("Invalid category: " + category);
+        };
     }
 
     // 2 Update Item

@@ -1,21 +1,17 @@
-public class Item{
-    private final String category;
+public abstract class Item{
     private final String id;
     private final String name;
     private int quantity;
     private double price;
 
-    public Item(String category, String id, String name, int quantity, double price){
-        this.category = category;
+    public Item(String id, String name, int quantity, double price){
         this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.price = price;
     }
 
-    public String getCategory() {
-        return category;
-    }
+    public abstract String getCategory();
 
     public String getId() {
         return id;
@@ -43,7 +39,7 @@ public class Item{
 
     public String toTableRow(int idWidth, int nameWidth, int quantityWidth, int priceWidth, int categoryWidth) {
         String format = " %-" + idWidth + "s | %-" + nameWidth + "s | %,-" + quantityWidth + "d | P%," + priceWidth + ".2f | %-" + categoryWidth + "s";
-        return String.format(format, id, name, quantity, price, category);
+        return String.format(format, id, name, quantity, price, getCategory());
     }
 
     public String toTableRowByCategory(int idWidth, int nameWidth, int quantityWidth, int priceWidth) {
@@ -53,6 +49,6 @@ public class Item{
 
     @Override
     public String toString() {
-        return "ID: " + id + " | Name: " + name + " | Quantity: " + String.format("%,d", quantity) + " | Price: " + String.format("P%,.2f", price) + " | Category: " + category;
+        return "ID: " + id + " | Name: " + name + " | Quantity: " + String.format("%,d", quantity) + " | Price: " + String.format("P%,.2f", price) + " | Category: " + getCategory();
     }
 }
