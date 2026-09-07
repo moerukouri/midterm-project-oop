@@ -84,7 +84,7 @@ public class UserInterface {
 
     public void updatePrice(String id, Item item) {
         double oldPrice = item.getPrice();
-        double newPrice = readPositiveDouble("Enter new price: ", "Price");
+        double newPrice = readPositiveDouble("Enter new price: P ", "Price");
         inventory.updatePrice(id, newPrice);
         System.out.println("Price of item " + item.getName() + " is updated from " + oldPrice + " to " + newPrice + ".");
     }
@@ -204,7 +204,7 @@ public class UserInterface {
             idWidth = Math.max(idWidth, item.getId().length());
             nameWidth = Math.max(nameWidth, item.getName().length());
             quantityWidth = Math.max(quantityWidth, String.format("%,d", item.getQuantity()).length());
-            priceWidth = Math.max(priceWidth, String.format("P%,.2f", item.getPrice()).length());
+            priceWidth = Math.max(priceWidth, String.format("%,.2f", item.getPrice()).length());
             if (includeCategory) {
                 categoryWidth = Math.max(categoryWidth, item.getCategory().length());
             }
