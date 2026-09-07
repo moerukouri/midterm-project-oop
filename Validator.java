@@ -32,9 +32,12 @@ public class Validator {
         if(!input.matches("^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$")){
             return false;
         }
+        if(Double.parseDouble(input) > MAX_PRICE) {
+            System.out.println("Input cannot exceed max double limit of " + MAX_PRICE + ". Please enter a smaller value.");
+            return false;
+        }
 
-        double value = Double.parseDouble(input);
-        return value > 0 && value <= MAX_PRICE;
+        return Double.parseDouble(input) > 0;
     }
 
     public boolean isValidId(String input) {
