@@ -10,9 +10,7 @@ public class UserInterface {
 
     // Menu handler
     public void printMenu() {
-        System.out.println(BORDER_STRING);
-        System.out.println("            Inventory Management System");
-        System.out.println(BORDER_STRING);
+        printBanner("INVENTORY MANAGEMENT SYSTEM");
         System.out.println("1 - Add Item");
         System.out.println("2 - Update Item");
         System.out.println("3 - Remove Item");
@@ -32,9 +30,7 @@ public class UserInterface {
 
     // 1 Add Item
     public void addItem() {
-        System.out.println(BORDER_STRING);
-        System.out.println("                  ADD NEW ITEM");
-        System.out.println(BORDER_STRING);
+        printBanner("ADD NEW ITEM");
 
         String category = readCategory();
         String id = readUniqueId();
@@ -58,9 +54,7 @@ public class UserInterface {
 
     // 2 Update Item
     public void updateItem() {
-        System.out.println(BORDER_STRING);
-        System.out.println("                  UPDATE ITEM");
-        System.out.println(BORDER_STRING);
+        printBanner("UPDATE ITEM");
 
         if (inventory.isEmpty()) {
             System.out.println("No items in the inventory to update!");
@@ -81,7 +75,6 @@ public class UserInterface {
         }
     }
 
-    // Update Quantity and Price methods
     public void updateQuantity(String id, Item item) {
         int oldQuantity = item.getQuantity();
         int newQuantity = readNonNegativeInt("Enter new quantity: ", "Quantity");
@@ -98,9 +91,7 @@ public class UserInterface {
 
     // 3 Remove Item
     public void removeItem() {
-        System.out.println(BORDER_STRING);
-        System.out.println("                  REMOVE ITEM");
-        System.out.println(BORDER_STRING);
+        printBanner("REMOVE ITEM");
 
         if (inventory.isEmpty()) {
             System.out.println("No items in the inventory to remove!");
@@ -118,9 +109,7 @@ public class UserInterface {
 
     // 4 Display Items by Category
     public void displayItemsByCategory() {
-        System.out.println(BORDER_STRING);
-        System.out.println("                  DISPLAY ITEMS BY CATEGORY");
-        System.out.println(BORDER_STRING);
+        printBanner("DISPLAY ITEMS BY CATEGORY");
 
         if (inventory.isEmpty()) {
             System.out.println("No items in the inventory to display!");
@@ -133,32 +122,26 @@ public class UserInterface {
             return;
         }
 
-        System.out.println(BORDER_STRING);
-        System.out.println("                  DISPLAY ITEMS BY " + category.toUpperCase());
-        System.out.println(BORDER_STRING);
+        printBanner(String.format("DISPLAY ITEMS BY %s", category.toUpperCase()));
 
         printItems(itemsByCategory, false);
     }
 
     // 5 Display All Items
     public void displayAllItems() {
+        printBanner("DISPLAY ALL ITEMS");
+
         if (inventory.isEmpty()) {
             System.out.println("No items in the inventory!");
             return;
         }
-
-        System.out.println(BORDER_STRING);
-        System.out.println("                  DISPLAY ALL ITEMS");
-        System.out.println(BORDER_STRING);
 
         printItems(inventory.getAllItems(), true);
     }
 
     // 6 Search Item
     public void searchItem() {
-        System.out.println(BORDER_STRING);
-        System.out.println("                  SEARCH ITEM");
-        System.out.println(BORDER_STRING);
+        printBanner("SEARCH ITEM");
 
         if (inventory.isEmpty()) {
             System.out.println("No items in the inventory to search!");
@@ -175,9 +158,7 @@ public class UserInterface {
 
     // 7 Sort Items
     public void sortItems() {
-        System.out.println(BORDER_STRING);
-        System.out.println("                  SORT ITEMS");
-        System.out.println(BORDER_STRING);
+        printBanner("SORT ITEMS");
 
         if (inventory.isEmpty()) {
             System.out.println("No items in the inventory to sort!");
@@ -189,9 +170,7 @@ public class UserInterface {
         String orderChoice = readOrderChoice();
         String order = orderChoice.equalsIgnoreCase("A") ? "ascending" : "descending";
 
-        System.out.println(BORDER_STRING);
-        System.out.println("        SORT ITEMS BY " + sortBy.toUpperCase() + " IN " + order.toUpperCase() + " ORDER        ");
-        System.out.println(BORDER_STRING);
+        printBanner(String.format("SORT ITEMS BY %s IN %s ORDER", sortBy.toUpperCase(), order.toUpperCase()));
 
         List<Item> sortedItems = inventory.getSortedItems(sortBy, order);
         printItems(sortedItems, true);
@@ -199,9 +178,7 @@ public class UserInterface {
 
     // 8 Display Low Stock Items
     public void displayLowStockItems() {
-        System.out.println(BORDER_STRING);
-        System.out.println("                  DISPLAY LOW STOCK ITEMS");
-        System.out.println(BORDER_STRING);
+        printBanner("DISPLAY LOW STOCK ITEMS");
 
         if (inventory.isEmpty()) {
             System.out.println("No items in the inventory to display!");
@@ -340,5 +317,17 @@ public class UserInterface {
             && Integer.parseInt(choice) <= high, 
             "Invalid choice. Please enter a number between " + low + " and " + high + ".");
         return Integer.parseInt(input);
+    }
+
+    // Miscellaneous methods
+    private static void printBanner(String title) {
+        System.out.println(BORDER_STRING);
+        System.out.println(centerTitle(title, BORDER_STRING.length()));
+        System.out.println(BORDER_STRING);
+    }
+
+    private static String centerTitle(String title, int width) {
+        int padding = Math.max(0, (width - title.length()) / 2);
+        return " ".repeat(padding) + title + " ".repeat(padding);
     }
 }
