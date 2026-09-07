@@ -1,5 +1,6 @@
 public class Validator {
     private final String[] VALID_CATEGORIES = {"Electronics", "Clothing", "Entertainment"};
+    private final double MAX_PRICE = 9_007_199_254_740_991.0;
 
     public boolean isValidPositiveInteger(String input) {
         try {
@@ -9,6 +10,7 @@ public class Validator {
             }
             return value > 0;
         } catch (NumberFormatException e) {
+            System.out.println("Input cannot exceed max integer limit of " + Integer.MAX_VALUE + ". Please enter a smaller value.");
             return false;
         }
     }
@@ -21,6 +23,7 @@ public class Validator {
             }
             return value >= 0;
         } catch (NumberFormatException e) {
+            System.out.println("Input cannot exceed max integer limit of " + Integer.MAX_VALUE + ". Please enter a smaller value.");
             return false;
         }
     }
@@ -29,7 +32,9 @@ public class Validator {
         if(!input.matches("^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$")){
             return false;
         }
-        return Double.parseDouble(input) > 0;
+
+        double value = Double.parseDouble(input);
+        return value > 0 && value <= MAX_PRICE;
     }
 
     public boolean isValidId(String input) {
