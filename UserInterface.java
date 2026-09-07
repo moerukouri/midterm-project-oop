@@ -64,13 +64,11 @@ public class UserInterface {
             return;
         }
 
-        String choice = readNonEmptyString("Update Quantity or Price? (Q/P): ", "Update Choice");
+        String choice = readUpdateChoice();
         if (choice.equalsIgnoreCase("Q")) {
             updateQuantity(id, item);
-        } else if (choice.equalsIgnoreCase("P")) {
-            updatePrice(id, item);
         } else {
-            System.out.println("Invalid choice. Please enter 'Q' for Quantity or 'P' for Price.");
+            updatePrice(id, item);
         }
     }
 
@@ -176,27 +174,11 @@ public class UserInterface {
             System.out.println("No items in the inventory to sort!");
             return;
         }
-        String sortChoice = readNonEmptyString("Sort by Quantity or Price? (Q/P): ", "Sort Choice");
-        String sortBy;
-        if(sortChoice.equalsIgnoreCase("Q")){
-            sortBy = "quantity";
-        } else if(sortChoice.equalsIgnoreCase("P")){
-            sortBy = "price";
-        } else {
-            System.out.println("Invalid choice. Please enter 'Q' for Quantity or 'P' for Price.");
-            return;
-        }
+        String sortChoice = readSortChoice();
+        String sortBy = sortChoice.equalsIgnoreCase("Q") ? "quantity" : "price";
         
-        String orderChoice = readNonEmptyString("Sort in Ascending or Descending order? (A/D): ", "Order Choice");
-        String order;
-        if (orderChoice.equalsIgnoreCase("A")) {
-            order = "ascending";
-        } else if (orderChoice.equalsIgnoreCase("D")) {
-            order = "descending";
-        } else {
-            System.out.println("Invalid choice. Please enter 'A' for Ascending or 'D' for Descending.");
-            return;
-        }
+        String orderChoice = readOrderChoice();
+        String order = orderChoice.equalsIgnoreCase("A") ? "ascending" : "descending";
 
         System.out.println(BORDER_STRING);
         System.out.println("        SORT ITEMS BY " + sortBy.toUpperCase() + " IN " + order.toUpperCase() + " ORDER        ");
@@ -277,10 +259,6 @@ public class UserInterface {
         return input;
     }
 
-    private static String readNonEmptyString(String prompt, String fieldName){
-        return readValidatedInput(prompt, input -> !input.isEmpty(), fieldName + " cannot be empty.");
-    }
-
     private static String readName(){
         return readValidatedInput("Enter item name: ", validator::isValidName, "Name must contain only letters, numbers, and spaces.");
     }
@@ -321,6 +299,30 @@ public class UserInterface {
         String input = readValidatedInput(prompt, validator::isValidPositiveDouble, fieldName + " must be a positive number with at most two decimal places.");
         return Double.parseDouble(input);
     }
+
+    private static String readUpdateChoice() {
+    return readValidatedInput(
+            "Update Quantity or Price? (Q/P): ",
+            input -> input.equalsIgnoreCase("Q") || input.equalsIgnoreCase("P"),
+            "Invalid choice. Please enter 'Q' for Quantity or 'P' for Price."
+        );
+    }
+
+    private static String readOrderChoice() {
+    return readValidatedInput(
+            "Sort in Ascending or Descending order? (A/D): ",
+            input -> input.equalsIgnoreCase("A") || input.equalsIgnoreCase("D"),
+            "Invalid choice. Please enter 'A' for Ascending or 'D' for Descending."
+        );
+    }
+
+    private static String readSortChoice() {
+    return readValidatedInput(
+        "Sort by Quantity or Price? (Q/P): ",
+        input -> input.equalsIgnoreCase("Q") || input.equalsIgnoreCase("P"),
+        "Invalid choice. Please enter 'Q' for Quantity or 'P' for Price."
+    );
+}
 
     private static int readMenuChoice(int low, int high){
         String input = readValidatedInput("Enter your choice: ",
