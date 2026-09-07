@@ -254,7 +254,7 @@ public class UserInterface {
     }
 
     private static String readName(){
-        return readValidatedInput("Enter item name: ", validator::isValidName, "Name must contain only letters, numbers, and spaces.");
+        return readValidatedInput("Enter item name: ", validator::isValidName, "Name must not be empty.");
     }
 
     private static String readCategory(){

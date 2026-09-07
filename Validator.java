@@ -3,41 +3,46 @@ public class Validator {
     private final double MAX_PRICE = 9_007_199_254_740_991.0;
 
     public boolean isValidPositiveInteger(String input) {
-        try {
-            int value = Integer.parseInt(input);
-            if(!input.matches("^[1-9][0-9]*$")){
-                return false;
-            }
-            return value > 0;
-        } catch (NumberFormatException e) {
+        if(!input.matches("^[1-9][0-9]*$")){
+            return false;
+        }
+
+        int value = Integer.parseInt(input);
+
+        if(value > Integer.MAX_VALUE) {
             System.out.println("Input cannot exceed max integer limit of " + Integer.MAX_VALUE + ". Please enter a smaller value.");
             return false;
         }
+        return value >= 0;
     }
 
     public boolean isValidNonNegativeInteger(String input) {
-        try {
-            int value = Integer.parseInt(input);
-            if(!input.matches("^[0-9]+$")){
-                return false;
-            }
-            return value >= 0;
-        } catch (NumberFormatException e) {
+        if(!input.matches("^[0-9]+$")){
+            return false;
+        }
+
+        int value = Integer.parseInt(input);
+
+        if(value > Integer.MAX_VALUE) {
             System.out.println("Input cannot exceed max integer limit of " + Integer.MAX_VALUE + ". Please enter a smaller value.");
             return false;
         }
+        return value >= 0;
     }
 
     public boolean isValidPositiveDouble(String input) {
         if(!input.matches("^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$")){
             return false;
         }
-        if(Double.parseDouble(input) > MAX_PRICE) {
+
+        double value = Double.parseDouble(input);
+
+        if(value > MAX_PRICE) {
             System.out.println("Input cannot exceed max double limit of " + MAX_PRICE + ". Please enter a smaller value.");
             return false;
         }
 
-        return Double.parseDouble(input) > 0;
+        return value > 0;
     }
 
     public boolean isValidId(String input) {
@@ -45,7 +50,7 @@ public class Validator {
     }
 
     public boolean isValidName(String input){
-        return input.matches("^[a-zA-Z0-9 ]+$");
+        return !input.trim().isEmpty();
     }
 
     public String normalizeCategory(String category) {
