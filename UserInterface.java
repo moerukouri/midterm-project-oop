@@ -78,15 +78,23 @@ public class UserInterface {
     public void updateQuantity(String id, Item item) {
         int oldQuantity = item.getQuantity();
         int newQuantity = readNonNegativeInt("Enter new quantity: ", "Quantity");
+        if (oldQuantity == newQuantity) {
+            System.out.println("Quantity is already " + newQuantity + ". No changes were made.");
+            return;
+        }
         inventory.updateQuantity(id, newQuantity);
-        System.out.println("Quantity of item " + item.getName() + " is updated from " + oldQuantity + " to " + newQuantity + ".");
+        System.out.println("Quantity of item '" + item.getName() + "' is updated from " + oldQuantity + " to " + newQuantity + ".");
     }
 
     public void updatePrice(String id, Item item) {
         double oldPrice = item.getPrice();
         double newPrice = readPositiveDouble("Enter new price: P ", "Price");
+        if (oldPrice == newPrice) {
+            System.out.println("Price is already P " + String.format("%,.2f", newPrice) + ". No changes were made.");
+            return;
+        }
         inventory.updatePrice(id, newPrice);
-        System.out.println("Price of item " + item.getName() + " is updated from " + oldPrice + " to " + newPrice + ".");
+        System.out.println("Price of item '" + item.getName() + "' is updated from P " + String.format("%,.2f", oldPrice) + " to P " + String.format("%,.2f", newPrice) + ".");
     }
 
     // 3 Remove Item
