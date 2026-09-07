@@ -63,7 +63,7 @@ public class UserInterface {
         String id = readId("Enter item ID to update: ");
         Item item = inventory.findItemById(id);
         if (item == null) {
-            System.out.println("Item with ID " + id + " not found!");
+            System.out.println("Item not found!");
             return;
         }
 
@@ -108,7 +108,7 @@ public class UserInterface {
         String id = readId("Enter item ID to remove: ");
         Item item = inventory.findItemById(id);
         if (item == null) {
-            System.out.println("Item with ID " + id + " not found!");
+            System.out.println("Item not found!");
             return;
         }
         Item removed = inventory.removeItem(id);
@@ -242,25 +242,39 @@ public class UserInterface {
 
     // Input reading methods
     private static String readValidatedInput(String prompt, Predicate<String> isValid, String errorMessage) {
-        System.out.print(prompt);
-        String input = sc.nextLine().trim();
-
-        while (!isValid.test(input)) {
-            System.out.println(errorMessage);
+        String input;
+        boolean valid;
+        do {
             System.out.print(prompt);
             input = sc.nextLine().trim();
-        }
+
+            valid = isValid.test(input);
+
+            if (!valid) {
+                System.out.println(errorMessage);
+            }
+
+        } while (!valid);
         return input;
     }
 
     private static String readName(){
-        return readValidatedInput("Enter item name: ", validator::isValidName, "Name must not be empty.");
+        return readValidatedInput("Enter item name: ", validator::isValidName, "Invalid name. Use letters, numbers, spaces, and common product symbols only.");
     }
 
     private static String readCategory(){
-        String category = readValidatedInput("Enter item category (Electronics, Clothing, Entertainment): ", 
-        validator::isValidCategory, 
-        "Invalid category. Please enter one of the following: Electronics, Clothing, Entertainment.");
+        boolean isValid;
+        String category;
+        do {
+            System.out.print("Enter item category (Electronics, Clothing, Entertainment): ");
+            category = sc.nextLine().trim();
+
+            isValid = validator.isValidCategory(category);
+
+            if(!isValid) {
+                System.out.println("Category " + category + " does not exist!");
+            }
+        } while(!isValid);
         return validator.normalizeCategory(category);
     }
 
@@ -280,17 +294,17 @@ public class UserInterface {
     }
 
     private static int readPositiveInt(String prompt, String fieldName) {
-        String input = readValidatedInput(prompt, validator::isValidPositiveInteger, fieldName + " must be a whole number greater than zero.");
+        String input = readValidatedInput(prompt, validator::isValidPositiveInteger, fieldName + " must be a whole number greater than zero and cannot exceed " + Integer.MAX_VALUE + ".");
         return Integer.parseInt(input);
     }
  
     private static int readNonNegativeInt(String prompt, String fieldName) {
-        String input = readValidatedInput(prompt, validator::isValidNonNegativeInteger, fieldName + " must be a whole number that is zero or greater.");
+        String input = readValidatedInput(prompt, validator::isValidNonNegativeInteger, fieldName + " must be a whole number from 0 to " + Integer.MAX_VALUE + ".");
         return Integer.parseInt(input);
     }
  
     private static double readPositiveDouble(String prompt, String fieldName) {
-        String input = readValidatedInput(prompt, validator::isValidPositiveDouble, fieldName + " must be a positive number with at most two decimal places.");
+        String input = readValidatedInput(prompt, validator::isValidPositiveDouble, fieldName + " must be a positive number with at most two decimal places and cannot exceed " + String.format("%,.2f", validator.getMaxPrice()) + ".");
         return Double.parseDouble(input);
     }
 
