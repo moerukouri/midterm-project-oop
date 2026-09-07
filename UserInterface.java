@@ -112,7 +112,7 @@ public class UserInterface {
             return;
         }
         Item removed = inventory.removeItem(id);
-        System.out.println("Item " + removed.getName() + " with ID " + id + " has been removed from the inventory.");
+        System.out.println("Item '" + removed.getName() + "' with ID " + id + " has been removed from the inventory.");
     }
 
     // 4 Display Items by Category
